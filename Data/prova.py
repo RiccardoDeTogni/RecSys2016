@@ -37,13 +37,16 @@ top5 = count.most_common(5)
 top5 = np.asarray(top5)
 top5 = top5[:,0]
 
-f = open('toppop_active.txt','w')
-f2 = open('toppop.txt','w')
+f = open('toppop_active.csv','w')
+f2 = open('toppop.csv','w')
 f.write('user_id,recommended_items\n')
 f2.write('user_id,recommended_items\n')
+cnt = 0
 for i in userz:
-	f.write(str(i) + ',' + str(top5[0])+ ' ' + str(top5[1])+ ' ' + str(top5[2])+ ' ' + str(top5[3])+ ' ' + str(top5[4]) + '\n')
-	f2.write(str(i) + ',' + str(top5gen[0])+ ' ' + str(top5gen[1])+ ' ' + str(top5gen[2])+ ' ' + str(top5gen[3])+ ' ' + str(top5gen[4]) + '\n')
+	if cnt < 10000:
+		cnt += 1
+		f.write(str(i) + ',' + str(top5[0])+ ' ' + str(top5[1])+ ' ' + str(top5[2])+ ' ' + str(top5[3])+ ' ' + str(top5[4]) + '\n')
+		f2.write(str(i) + ',' + str(top5gen[0])+ ' ' + str(top5gen[1])+ ' ' + str(top5gen[2])+ ' ' + str(top5gen[3])+ ' ' + str(top5gen[4]) + '\n')
 	
 	#f.write(np.array2string(np.hstack((i,top5))))
 
