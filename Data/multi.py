@@ -72,6 +72,7 @@ for item in items:
 	item = convertItem(item)
 '''
 def calculate(user):
+	i = 0
 	rated = {}
 	ratings = {}
 	for interaction in interactions:
@@ -79,7 +80,7 @@ def calculate(user):
 			rated[intify(interaction[1])] = intify(interaction[2])
 	#print rated
 	if not rated:
-		f.write(str(user[0]) + ', ' + '2778525 1244196 1386412 657183 2791339')
+		return (str(user[0]) + ', ' + '2778525 1244196 1386412 657183 2791339\n')
 	else:
 		ratedvec = []
 		for item in items:
@@ -97,7 +98,7 @@ def calculate(user):
 				sum = 0
 				norma = 0
 				normb = 0
-				a = item[1].split(',')
+				a = item1[1].split(',')
 				b = item2[1].split(',')
 				for title in a:
 					if title in b:
@@ -129,7 +130,7 @@ def calculate(user):
 					sum +=1
 				norma += 1
 				normb += 1
-				a = item[10].split(',')
+				a = item1[10].split(',')
 				b = item2[10].split(',')
 				for tag in a:
 					if tag in b:
@@ -164,26 +165,29 @@ def calculate(user):
 		i += 1	
 		sorted_x = sorted(ratings.items(), key=operator.itemgetter(1), reverse=True)
 		#print(sorted_x[1])
-		f.write(str(user[0]) + ', ')
+		
 		u = 0
 		v = 0
+		res = 'str(user[0])'
 		while (u < 5):
 			if(sorted_x[v] not in rated):
 				#print(sorted_x[v])
-				f.write(str(sorted_x[v][0]) + ' ')
+				res += (str(sorted_x[v][0]) + ' ')
 				u += 1
 				v += 1
 			else:
 				v += 1
-		f.write('\n')
+		res += ('\n')
 		print('user ' + str(i))
 #similarity
 
 
 
 f = open('prova.csv','w')
-i = 0
-res = [pool.apply_async(calculate, user) for user in users]
+
+res = pool.map(calculate, users)
+
+f.write(res)
 
 
 	

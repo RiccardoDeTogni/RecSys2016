@@ -81,10 +81,13 @@ i = 0
 for user in targets:
 	rated = {}
 	ratings = {}
+	#extract items that user interacted
 	for interaction in interactions:
 		if interaction[0] == user[0]:
 			rated[intify(interaction[1])] = intify(interaction[2])
 	#print rated
+	
+	#set Top Popular items if user has no interaction
 	if not rated:
 		f.write(str(user[0]) + ', ' + '2778525 1244196 1386412 657183 2791339\n')
 		i += 1
@@ -92,10 +95,13 @@ for user in targets:
 		
 	else:
 		ratedvec = []
+		#extract rated items
 		for item in items:
 			if intify(item[0]) in rated:
 				ratedvec.append(convertItem(item))
 		#print(ratedvec)
+		
+		#calculate estimated ratings for all items
 		for item1 in items:
 			item1 = convertItem(item1)
 			num = []
@@ -107,7 +113,7 @@ for user in targets:
 				sum = 0
 				norma = 0
 				normb = 0
-				a = item[1].split(',')
+				a = item1[1].split(',')
 				b = item2[1].split(',')
 				for title in a:
 					if title in b:
@@ -139,7 +145,7 @@ for user in targets:
 					sum +=1
 				norma += 1
 				normb += 1
-				a = item[10].split(',')
+				a = item1[10].split(',')
 				b = item2[10].split(',')
 				for tag in a:
 					if tag in b:
@@ -155,6 +161,7 @@ for user in targets:
 			
 			#print (num)
 			
+			#calculate similarity
 			for k in range(0, len(ratedvec)):
 				#print (num[k])
 				tmp += num[k]
