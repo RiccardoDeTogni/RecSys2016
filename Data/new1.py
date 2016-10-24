@@ -12,7 +12,7 @@ from functools import partial
 
 #LOADING DATASETS
 #Loading interactions
-pool = ThreadPool(8)
+#pool = ThreadPool(8)
 
 with open('interactions.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
@@ -71,9 +71,10 @@ def convertItem(item):
 for item in items:
 	item = convertItem(item)
 '''
-
+for i in range(0,len(items)):
+	items[i] = convertItem(items[i])
 #similarity
-
+itemActive = [x for x in items if x[12] == 1]
 
 
 f = open('ratings.csv','w')
@@ -98,14 +99,13 @@ for user in targets:
 		#extract rated items
 		for item in items:
 			if intify(item[0]) in rated:
-				ratedvec.append(convertItem(item))
+				ratedvec.append(item)
 		#print(ratedvec)
 		
 		#calculate estimated ratings for all items
-		for item1 in items:
-			item1 = convertItem(item1)
-			num = []
-			den = []
+		for item1 in itemActive:
+			num = 0
+			#den = []
 			j = 0
 			#print item1
 			for item2 in ratedvec:
@@ -154,27 +154,12 @@ for user in targets:
 				normb += len(b)
 				
 				#print(str(intify(rated[item2[0]])*sum/(math.sqrt(norma*normb))) + ' ' + str(rated[item2[0]]) + ' ' + str(sum))
-				num.append(intify(rated[item2[0]])*sum/(math.sqrt(norma*normb)))
+				num += (intify(rated[item2[0]])*sum/(math.sqrt(norma*normb)))
 				#den.append(sum/(math.sqrt(norma*normb)))
-			tmp = 0
-			tmp2 = 1
 			
 			#print (num)
 			
-			#calculate similarity
-			for k in range(0, len(ratedvec)):
-				#print (num[k])
-				tmp += num[k]
-				#tmp2 += den[k]
-			if tmp2 > 0:
-				a = tmp/tmp2
-			else:
-				a = 0
-			
-			if item1[12] == 1 :
-				ratings[item1[0]] = a
-			else:
-				ratings[item1[0]] = 0
+			ratings[item1[0]] = num
 			#print(ratings[item1[0]])
 			#f.write(str(a) + '\n')
 			

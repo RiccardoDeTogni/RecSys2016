@@ -27,7 +27,7 @@ with open('user_profile.csv', 'rb') as f:
     users = list(reader)[1:]
 with open('target_users.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
-    targets = list(reader)[1:]
+    targets = list(reader)[1:5001]
 print "Loaded datasets"
 
 def intify(str):
@@ -71,6 +71,7 @@ def convertItem(item):
 for item in items:
 	item = convertItem(item)
 '''
+
 def calculate(user):
 	i = 0
 	rated = {}
