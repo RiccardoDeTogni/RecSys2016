@@ -1,6 +1,6 @@
 #IMPORT
 import time
-import numpy as np
+#import numpy as np
 import csv
 import os
 import math
@@ -25,9 +25,9 @@ with open('item_profile.csv', 'rb') as f:
 with open('user_profile.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
     users = list(reader)[1:]
-with open('target_users.csv', 'rb') as f:
+with open('target_usershalf.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
-    targets = list(reader)[1:]
+    targets = list(reader)[5001:]
 print "Loaded datasets"
 
 def intify(str):
