@@ -1,6 +1,5 @@
 #IMPORT
 import datetime
-import numpy as np
 import csv
 import os
 import math
@@ -154,7 +153,7 @@ itemUsers = build_ItemUser(itemUsersList)
 
 activeItems = actives(items)
 
-print len(activeItems)
+#print len(activeItems)
 #print activeItems
 filename= 'collab' + str(datetime.datetime.utcnow().strftime('%I.%M.%S')) + '.csv'
 f = open(filename, 'w')
