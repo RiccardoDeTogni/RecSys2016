@@ -27,7 +27,7 @@ with open('user_profile.csv', 'rb') as f:
     users = list(reader)[1:]
 with open('target_users.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
-    targets = list(reader)[1:3]
+    targets = list(reader)[1:]
 with open('item_user_dataset.csv', 'rb') as f:
 	reader = csv.reader(f, delimiter=',')
 	itemUsersList = list(reader)[0:]
@@ -159,9 +159,9 @@ filename= 'collab' + str(datetime.datetime.utcnow().strftime('%I.%M.%S')) + '.cs
 f = open(filename, 'w')
 f.write('user_id,recommended_items\n')
 print 'hi3'
-i=7500
+i=1
 for user in target_set:
-	print len(rated[user])
+	#print len(rated[user])
 	print 'User ' + str(i)
 	if user not in rated:
 		suggestions = ucb(user, users)
