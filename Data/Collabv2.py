@@ -26,7 +26,7 @@ with open('user_profile.csv', 'rb') as f:
     users = list(reader)[1:]
 with open('target_users.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
-    targets = list(reader)[8:30]
+    targets = list(reader)[8750:]
 with open('item_user_dataset.csv', 'rb') as f:
 	reader = csv.reader(f, delimiter=',')
 	itemUsersList = list(reader)[0:]
@@ -152,10 +152,9 @@ def build_user_dict(users):
 #build dictionary user : [rated items]
 def build_rated(interactions, target_set):
 	rated = defaultdict(list)
-	tmp_set = set(target_set)
+	#tmp_set = set(target_set)
 	for interaction in interactions:
-		if(intify(interaction[0]) in tmp_set):
-			rated[intify(interaction[0])].append(intify(interaction[1]))
+		rated[intify(interaction[0])].append(intify(interaction[1]))
 	return rated
 
 def build_explicit_rated(interactions, target_set):
@@ -186,7 +185,7 @@ def actives(items):
 #find n nearest neighbours of a user
 def find_neighbours(userID, n):
 	compare = defaultdict(list)
-	neighbours = defaultdict(list)
+	neighbours = []
 	tmp_set = set(user_set)
 	for user in tmp_set:
 		if user != userID:
@@ -194,7 +193,7 @@ def find_neighbours(userID, n):
 			compare[user] = fennecSim(user_dict[userID], user_dict[user])
 	sorted_compare = sorted(compare.items(), key=operator.itemgetter(1), reverse=True)
 	for i in range (0, n):
-		neighbours[userID].append(sorted_compare[i])
+		neighbours.append(sorted_compare[i])
 	#print neighbours
 	return neighbours
 
@@ -208,12 +207,14 @@ def toppop():
 def contentUserUser(user):
     ratings = {item : 0 for item in activeItems}
     similar_users = find_neighbours(user, 200)
-    #print user_dict[user]
-    for key, value in similar_users.iteritems():
-	#print str(key) + ' ' + str(value)
-        for item in rated[value[0]]:
-            ratings[item] += value[1]
+    #print similar_users
+    for neigh in similar_users:
+        for item in rated[neigh[0]]:
+			if item in activeItems:
+				ratings[item] += neigh[1]
+	    #print 'value' + str(value[1])
     sorted_x = sorted(ratings, key=ratings.get, reverse=True)
+    #print sorted_x
     return str(' '.join(map(str, sorted_x[:5])))
 
 def cf(ratedList, itemUsers):
@@ -240,7 +241,7 @@ rated = build_rated(interactions, target_set)
 itemUsers = build_ItemUser(itemUsersList)
 
 activeItems = actives(items)
-
+print 'Loaded Data Structures'
 #print len(activeItems)
 #print activeItems
 filename= 'hybrid' + str(datetime.datetime.utcnow().strftime('%I.%M.%S')) + '.csv'
