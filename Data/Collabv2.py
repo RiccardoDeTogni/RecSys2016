@@ -26,7 +26,7 @@ with open('user_profile.csv', 'rb') as f:
     users = list(reader)[1:]
 with open('target_users.csv', 'rb') as f:
     reader = csv.reader(f, delimiter='\t')
-    targets = list(reader)[7:10]
+    targets = list(reader)[8:30]
 with open('item_user_dataset.csv', 'rb') as f:
 	reader = csv.reader(f, delimiter=',')
 	itemUsersList = list(reader)[0:]
@@ -98,7 +98,7 @@ def convert_user(user):
 
 def compare(i1,i2):
 	if isinstance(i1, int) or isinstance(i1, float):
-		if i1 == i2:
+		if i1 != 0 and i1 != -1 and i1 == i2:
 			return 1
 		else:
 			return 0
@@ -106,7 +106,7 @@ def compare(i1,i2):
 		i2 = i2.split(",")
 		i1 = i1.split(",")
 
-		den = math.sqrt(len(i1)*len(i2)) + 2
+		den = math.sqrt(len(i1)*len(i2)) + 3
 		counter = 0
 		for i in range(len(i1)):
 			for j in range(len(i2)):
@@ -116,10 +116,10 @@ def compare(i1,i2):
 
 def fennecSim(i1,i2):
 	score = 0
-	weights = [0,1.8,0.3,0.85,0.3,0.7,0,0,0.6,1.5,0,0] #magic numbers
+	weights = [0,1.5,0.5,1,0.2,1,1,0.5,0,0,1,1] #magic numbers
 	for i in range(1,min(len(i2),len(i1))):
 		#print i1[i], i2[i]
-		score += compare(i1[i],i2[i]) #* weights[i]
+		score += compare(i1[i],i2[i])* weights[i]
 	return score
 
 #build dictionary item : [user that rated it]
@@ -166,11 +166,6 @@ def build_explicit_rated(interactions, target_set):
 			rated_ex[intify(interaction[0])].append(list(intify(interaction[1]), intify(interaction[2])))
 	return rated_ex
 
-#TODO similarity user-user through attributes
-def similarUserUser(user1, user2):
-	res = 0
-	return res
-
 #item-item similarity
 def similar(item1,item2):
 	l1 = len(item1)
@@ -216,7 +211,7 @@ def contentUserUser(user):
     #print user_dict[user]
     for key, value in similar_users.iteritems():
 	#print str(key) + ' ' + str(value)
-        for item in set(rated[value[0]]):
+        for item in rated[value[0]]:
             ratings[item] += value[1]
     sorted_x = sorted(ratings, key=ratings.get, reverse=True)
     return str(' '.join(map(str, sorted_x[:5])))
